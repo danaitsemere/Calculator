@@ -1,5 +1,6 @@
 package com.example.calculator
 
+import android.icu.text.SymbolTable
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -44,32 +45,41 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         btnAdd.setOnClickListener {
-            var num1 = etNum1.text.toString()
-            var num2 = etNum2.text.toString()
-
-            var sum = num1.toInt() + num2.toInt()
-            tvResult.text = sum.toString()
+            obtainValues("+")
         }
         btnSubract.setOnClickListener {
-            var num1 = etNum1.text.toString()
-            var num2 = etNum2.text.toString()
-
-            var difference = num1.toInt() - num2.toInt()
-            tvResult.text = difference.toString()
+            obtainValues("-")
         }
         btnMultiply.setOnClickListener {
-            var num1 = etNum1.text.toString()
-            var num2 = etNum2.text.toString()
-
-            var product = num1.toInt() * num2.toInt()
-            tvResult.text = product.toString()
+            obtainValues("x")
         }
         btnDivide.setOnClickListener {
-            var num1 = etNum1.text.toString()
-            var num2 = etNum2.text.toString()
-
-            var quotient = num1.toInt() / num2.toInt()
-            tvResult.text = quotient.toString()
+          obtainValues("/")
         }
+    }
+    fun obtainValues(symbol: String) {
+        val num1= etNum1.text.toString()
+        val num2= etNum2.text.toString()
+        if (num1.isBlank()){
+            etNum1.error="Num 1 is required"
+            return
+        }
+        if (num2.isBlank()){
+            etNum2.error="Num 2 required "
+            return
+        }
+
+      performCalculation(symbol, num1,num2)
+    }
+
+    fun performCalculation(symbol: String, num1:String, num2: String){
+        val result= when(symbol){
+            "+" -> num1.toDouble() + num2.toInt()
+            "-" -> num1.toDouble() - num2.toInt()
+            "x" -> num1.toDouble() * num2.toInt()
+            "/" -> num1.toDouble() / num2.toInt()
+            else -> 0.0
+        }
+    tvResult.text=result.toString()
     }
 }
